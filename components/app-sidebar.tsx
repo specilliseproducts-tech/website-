@@ -56,8 +56,8 @@ const items = [
     icon: Image,
   },
   {
-    title: 'Team',
-    url: '/dashboard/team',
+    title: 'Teams',
+    url: '/dashboard/teams',
     icon: Users,
   },
   {

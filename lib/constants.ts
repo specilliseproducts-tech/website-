@@ -1,5 +1,9 @@
 // Gallery categories
 export const galleryCategories = [
+  { id: 'Laboratory', name: 'Laboratory' },
+  { id: 'Manufacturing', name: 'Manufacturing' },
+  { id: 'Research', name: 'Research' },
+  { id: 'Equipment', name: 'Equipment' },
   { id: 'Office', name: 'Office' },
   { id: 'Team', name: 'Team' },
   { id: 'Products', name: 'Products' },
@@ -8,6 +12,32 @@ export const galleryCategories = [
 
 // Gallery category list for form dropdowns (string array for backward compatibility)
 export const galleryCategoryList = galleryCategories.map((cat) => cat.name);
+
+// Team positions
+export const teamPositions = [
+  'CEO',
+  'CTO',
+  'CFO',
+  'Director',
+  'Manager',
+  'Team Lead',
+  'Senior Developer',
+  'Developer',
+  'Senior Engineer',
+  'Engineer',
+  'Senior Scientist',
+  'Research Scientist',
+  'Lab Technician',
+  'Quality Assurance',
+  'Sales Manager',
+  'Marketing Manager',
+  'HR Manager',
+  'Operations Manager',
+  'Project Manager',
+  'Business Analyst',
+  'Consultant',
+  'Intern',
+];
 
 // Product data
 export const products = [

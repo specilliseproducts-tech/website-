@@ -404,8 +404,11 @@ export function useUpdateGalleryItem() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { 
-      id: string; 
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
       data: Partial<{
         category: string;
         title: string;
@@ -462,6 +465,148 @@ export function useDeleteGalleryItem() {
       toast({
         title: 'Error',
         description: error.message || 'Failed to delete gallery item',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+// Team hooks
+export function useTeams(
+  params?: PaginationParams & { search?: string; position?: string },
+) {
+  return useQuery({
+    queryKey: ['teams', params],
+    queryFn: async () => {
+      console.log('useTeams - Fetching with params:', params);
+      const result = await apiClient.getTeams(params);
+      console.log('useTeams - API result:', result);
+      return result;
+    },
+    select: (data) => {
+      console.log('useTeams - Raw data:', data);
+      console.log('useTeams - data.success:', data.success);
+      console.log('useTeams - data.data:', data.data);
+
+      if (data.success && data.data) {
+        const selected = data.data;
+        console.log('useTeams - Selected data (teams):', selected.teams);
+        console.log(
+          'useTeams - Selected data (pagination):',
+          selected.pagination,
+        );
+        return selected;
+      }
+
+      console.log('useTeams - Returning null due to unsuccessful response');
+      return null;
+    },
+  });
+}
+
+export function useTeam(id: string) {
+  return useQuery({
+    queryKey: ['teams', id],
+    queryFn: () => apiClient.getTeam(id),
+    select: (data) => (data.success ? data.data : null),
+  });
+}
+
+export function useCreateTeam() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { name: string; position: string; imagePath: string }) =>
+      apiClient.createTeam(data),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['teams'] });
+        toast({
+          title: 'Success',
+          description: 'Team member created successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to create team member',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to create team member',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+export function useUpdateTeam() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: {
+        name: string;
+        position: string;
+        imagePath: string;
+      };
+    }) => apiClient.updateTeam(id, data),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['teams'] });
+        toast({
+          title: 'Success',
+          description: 'Team member updated successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to update team member',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to update team member',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+export function useDeleteTeam() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => apiClient.deleteTeam(id),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['teams'] });
+        toast({
+          title: 'Success',
+          description: 'Team member deleted successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to delete team member',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to delete team member',
         variant: 'destructive',
       });
     },

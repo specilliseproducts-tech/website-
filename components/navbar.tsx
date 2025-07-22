@@ -39,16 +39,16 @@ const navItems = [
     href: '/our-approach',
     dropdown: false,
   },
-  {
-    name: 'Application',
-    href: '#',
-    dropdown: false,
-  },
-  {
-    name: 'Publication',
-    href: '#',
-    dropdown: false,
-  },
+  // {
+  //   name: 'Application',
+  //   href: '#',
+  //   dropdown: false,
+  // },
+  // {
+  //   name: 'Publication',
+  //   href: '#',
+  //   dropdown: false,
+  // },
   {
     name: 'Contact Us',
     href: '/contact',

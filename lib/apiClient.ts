@@ -53,10 +53,8 @@ class ApiClient {
         };
       }
 
-      return {
-        success: true,
-        data,
-      };
+      // Return the API response directly since it already has the correct format
+      return data;
     } catch (error) {
       return {
         success: false,
@@ -209,13 +207,16 @@ class ApiClient {
   }
 
   // Gallery methods
-  async getGalleryItems(params?: PaginationParams & { search?: string; category?: string }) {
+  async getGalleryItems(
+    params?: PaginationParams & { search?: string; category?: string },
+  ) {
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.append('page', params.page.toString());
-    if (params?.perPage) searchParams.append('limit', params.perPage.toString());
+    if (params?.perPage)
+      searchParams.append('limit', params.perPage.toString());
     if (params?.search) searchParams.append('search', params.search);
     if (params?.category) searchParams.append('category', params.category);
-    
+
     const query = searchParams.toString();
     return this.request<{
       galleryItems: any[];
@@ -244,20 +245,86 @@ class ApiClient {
     });
   }
 
-  async updateGalleryItem(id: string, data: Partial<{
-    category: string;
-    title: string;
-    subtitle: string;
+  async updateGalleryItem(
+    id: string,
+    data: Partial<{
+      category: string;
+      title: string;
+      subtitle: string;
+      imagePath: string;
+    }>,
+  ) {
+    return this.request<{ galleryItem: any; message: string }>(
+      `/gallery/${id}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      },
+    );
+  }
+
+  async deleteGalleryItem(id: string) {
+    return this.request<{ message: string }>(`/gallery/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Team methods
+  async getTeams(
+    params?: PaginationParams & { search?: string; position?: string },
+  ) {
+    const query = params
+      ? new URLSearchParams(
+          Object.entries(params).filter(
+            ([, value]) => value !== undefined && value !== '',
+          ) as [string, string][],
+        ).toString()
+      : '';
+
+    return this.request<{
+      teams: any[];
+      pagination: {
+        page: number;
+        perPage: number;
+        totalCount: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+      };
+    }>(`/teams${query ? `?${query}` : ''}`);
+  }
+
+  async getTeam(id: string) {
+    return this.request<{ team: any }>(`/teams/${id}`);
+  }
+
+  async createTeam(data: {
+    name: string;
+    position: string;
     imagePath: string;
-  }>) {
-    return this.request<{ galleryItem: any; message: string }>(`/gallery/${id}`, {
+  }) {
+    return this.request<{ team: any; message: string }>('/teams', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateTeam(
+    id: string,
+    data: Partial<{
+      name: string;
+      position: string;
+      imagePath: string;
+    }>,
+  ) {
+    return this.request<{ team: any; message: string }>(`/teams/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
-  async deleteGalleryItem(id: string) {
-    return this.request<{ message: string }>(`/gallery/${id}`, {
+  async deleteTeam(id: string) {
+    return this.request<{ message: string }>(`/teams/${id}`, {
       method: 'DELETE',
     });
   }

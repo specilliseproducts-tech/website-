@@ -1,39 +1,40 @@
-"use client"
+'use client';
 
-import { useRef } from "react"
-import { useFrame } from "@react-three/fiber"
-import type * as THREE from "three"
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+// import type * as THREE from "three"
 
 interface SimpleModelProps {
-  color: string
-  scale?: number
+  color: string;
+  scale?: number;
 }
 
 export default function SimpleModel({ color, scale = 1 }: SimpleModelProps) {
-  const groupRef = useRef<THREE.Group>(null)
-  const boxRef = useRef<THREE.Mesh>(null)
-  const sphereRef = useRef<THREE.Mesh>(null)
-  const cylinderRef = useRef<THREE.Mesh>(null)
+  const groupRef = useRef<any>(null);
+  const boxRef = useRef<any>(null);
+  const sphereRef = useRef<any>(null);
+  const cylinderRef = useRef<any>(null);
 
   // Create a simple model instead of loading a complex one
   useFrame(({ clock }) => {
     if (groupRef.current) {
       // Add subtle floating animation
-      groupRef.current.position.y = Math.sin(clock.getElapsedTime() * 0.5) * 0.05
+      groupRef.current.position.y =
+        Math.sin(clock.getElapsedTime() * 0.5) * 0.05;
     }
 
     if (boxRef.current) {
-      boxRef.current.rotation.y += 0.01
+      boxRef.current.rotation.y += 0.01;
     }
 
     if (sphereRef.current) {
-      sphereRef.current.rotation.x += 0.005
+      sphereRef.current.rotation.x += 0.005;
     }
 
     if (cylinderRef.current) {
-      cylinderRef.current.rotation.z += 0.008
+      cylinderRef.current.rotation.z += 0.008;
     }
-  })
+  });
 
   return (
     <group ref={groupRef} scale={[scale, scale, scale]} position={[0, 0, 0]}>
@@ -53,5 +54,5 @@ export default function SimpleModel({ color, scale = 1 }: SimpleModelProps) {
         <meshStandardMaterial color={color} metalness={0.7} roughness={0.2} />
       </mesh>
     </group>
-  )
+  );
 }
