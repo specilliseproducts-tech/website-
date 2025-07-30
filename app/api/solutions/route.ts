@@ -2,18 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
-const productCreateSchema = z.object({
+const solutionCreateSchema = z.object({
   slug: z.string().min(1, 'Slug is required'),
-  name: z.string().min(1, 'Name is required'),
-  shortDescription: z.string().min(1, 'Short description is required'),
+  title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
-  features: z.array(z.string()).default([]),
-  applications: z.array(z.string()).default([]),
-  modelPath: z.string().min(1, 'Model path is required'),
   imagePath: z.string().min(1, 'Image path is required'),
-  color: z.string().min(1, 'Color is required'),
-  category: z.string().min(1, 'Category is required'),
-  brochureUrl: z.string().min(1, 'Brochure URL is required'),
+  link: z.string().min(1, 'Link is required'),
 });
 
 export async function GET(request: NextRequest) {
@@ -22,7 +16,7 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const perPage = parseInt(searchParams.get('perPage') || '10');
     const search = searchParams.get('search') || '';
-    const sortBy = searchParams.get('sortBy') || 'name';
+    const sortBy = searchParams.get('sortBy') || 'title';
     const sortOrder = searchParams.get('sortOrder') || 'asc';
 
     const skip = (page - 1) * perPage;
@@ -32,13 +26,7 @@ export async function GET(request: NextRequest) {
     if (search) {
       where.OR = [
         {
-          name: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        },
-        {
-          category: {
+          title: {
             contains: search,
             mode: 'insensitive',
           },
@@ -49,40 +37,46 @@ export async function GET(request: NextRequest) {
             mode: 'insensitive',
           },
         },
+        {
+          slug: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
       ];
     }
 
     // Build sort conditions - only allow sorting by valid fields
     const validSortFields = [
-      'name',
-      'category',
+      'title',
+      'slug',
       'createdAt',
       'updatedAt',
     ] as const;
     type ValidSortField = (typeof validSortFields)[number];
     const validSortField = validSortFields.includes(sortBy as ValidSortField)
       ? sortBy
-      : 'name';
+      : 'title';
     const validSortOrder = sortOrder === 'desc' ? 'desc' : 'asc';
 
     const orderBy: any = {
       [validSortField]: validSortOrder,
     };
 
-    const [products, total] = await Promise.all([
-      prisma.product.findMany({
+    const [solutions, total] = await Promise.all([
+      prisma.solution.findMany({
         where,
         skip,
         take: perPage,
         orderBy,
       }),
-      prisma.product.count({ where }),
+      prisma.solution.count({ where }),
     ]);
 
     return NextResponse.json({
       success: true,
       data: {
-        products,
+        solutions,
         pagination: {
           page,
           perPage,
@@ -94,11 +88,11 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error('Error fetching solutions:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch products',
+        error: 'Failed to fetch solutions',
       },
       { status: 500 },
     );
@@ -108,13 +102,16 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const validatedData = productCreateSchema.parse(body);
+    const validatedData = solutionCreateSchema.parse(body);
 
-    const product = await prisma.product.create({
+    const solution = await prisma.solution.create({
       data: validatedData,
     });
 
-    return NextResponse.json(product, { status: 201 });
+    return NextResponse.json(
+      { success: true, data: solution },
+      { status: 201 },
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -123,9 +120,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error('Error creating product:', error);
+    console.error('Error creating solution:', error);
     return NextResponse.json(
-      { error: 'Failed to create product' },
+      { error: 'Failed to create solution' },
       { status: 500 },
     );
   }

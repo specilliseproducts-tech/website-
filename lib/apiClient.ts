@@ -1,4 +1,12 @@
 import type { Product, ProductInsert } from '@/app/dashboard/products/schema';
+import type {
+  Solution,
+  SolutionInsert,
+} from '@/app/dashboard/solutions/schema';
+import type {
+  PrincipalProduct,
+  PrincipalProductInsert,
+} from '@/app/dashboard/principal-products/schema';
 
 type ApiResponse<T> = {
   data?: T;
@@ -25,6 +33,43 @@ export type PaginatedResponse<T> = {
 };
 
 class ApiClient {
+  async getCollaborators(params?: PaginationParams & { search?: string }) {
+    const query = params
+      ? '?' +
+        new URLSearchParams(
+          Object.entries(params)
+            .filter(([_, v]) => v !== undefined && v !== '')
+            .map(([k, v]) => [k, String(v)]),
+        )
+      : '';
+    return this.request<{ collaborators: any[]; pagination: any }>(
+      `/collaborators${query}`,
+    );
+  }
+
+  async getCollaborator(id: string) {
+    return this.request<any>(`/collaborators/${id}`);
+  }
+
+  async createCollaborator(data: any) {
+    return this.request<any>(`/collaborators`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateCollaborator(id: string, data: any) {
+    return this.request<any>(`/collaborators/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteCollaborator(id: string) {
+    return this.request<any>(`/collaborators/${id}`, {
+      method: 'DELETE',
+    });
+  }
   private baseUrl: string;
 
   constructor(baseUrl: string = '/api') {
@@ -119,9 +164,17 @@ class ApiClient {
   // Product methods
   async getProducts(params?: PaginationParams) {
     const queryString = this.buildQueryString(params || {});
-    return this.request<PaginatedResponse<Product>>(
-      `/products${queryString ? `?${queryString}` : ''}`,
-    );
+    return this.request<{
+      products: Product[];
+      pagination: {
+        page: number;
+        perPage: number;
+        totalCount: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+      };
+    }>(`/products${queryString ? `?${queryString}` : ''}`);
   }
 
   async createProduct(data: ProductInsert) {
@@ -144,6 +197,78 @@ class ApiClient {
     });
   }
 
+  // Solution methods
+  async getSolutions(params?: PaginationParams) {
+    const queryString = this.buildQueryString(params || {});
+    return this.request<{
+      solutions: Solution[];
+      pagination: {
+        page: number;
+        perPage: number;
+        totalCount: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+      };
+    }>(`/solutions${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async createSolution(data: SolutionInsert) {
+    return this.request<Solution>('/solutions', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateSolution(id: string, data: SolutionInsert) {
+    return this.request<Solution>(`/solutions/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteSolution(id: string) {
+    return this.request<{ success: boolean }>(`/solutions/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Principal Product methods
+  async getPrincipalProducts(params?: PaginationParams) {
+    const queryString = this.buildQueryString(params || {});
+    return this.request<{
+      principalProducts: PrincipalProduct[];
+      pagination: {
+        page: number;
+        perPage: number;
+        totalCount: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+      };
+    }>(`/principal-products${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async createPrincipalProduct(data: PrincipalProductInsert) {
+    return this.request<PrincipalProduct>('/principal-products', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updatePrincipalProduct(id: string, data: PrincipalProductInsert) {
+    return this.request<PrincipalProduct>(`/principal-products/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deletePrincipalProduct(id: string) {
+    return this.request<{ success: boolean }>(`/principal-products/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
   // Contact Form methods
   async getContactForms(params?: PaginationParams & { search?: string }) {
     const searchParams = new URLSearchParams();
@@ -157,9 +282,11 @@ class ApiClient {
       contactForms: any[];
       pagination: {
         page: number;
-        limit: number;
-        total: number;
-        pages: number;
+        perPage: number;
+        totalCount: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
       };
     }>(`/contact-forms${query ? `?${query}` : ''}`);
   }
@@ -222,9 +349,11 @@ class ApiClient {
       galleryItems: any[];
       pagination: {
         page: number;
-        limit: number;
-        total: number;
-        pages: number;
+        perPage: number;
+        totalCount: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
       };
     }>(`/gallery${query ? `?${query}` : ''}`);
   }
@@ -325,6 +454,72 @@ class ApiClient {
 
   async deleteTeam(id: string) {
     return this.request<{ message: string }>(`/teams/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // SystemIntegrator methods
+  async getSystemIntegrators(params?: PaginationParams & { search?: string }) {
+    const query = params
+      ? new URLSearchParams(
+          Object.entries(params).filter(
+            ([, value]) => value !== undefined && value !== '',
+          ) as [string, string][],
+        ).toString()
+      : '';
+
+    return this.request<{
+      systemIntegrators: any[];
+      pagination: {
+        page: number;
+        perPage: number;
+        totalCount: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+      };
+    }>(`/system-integrators${query ? `?${query}` : ''}`);
+  }
+
+  async getSystemIntegrator(id: string) {
+    return this.request<{ systemIntegrator: any }>(`/system-integrators/${id}`);
+  }
+
+  async createSystemIntegrator(data: {
+    title: string;
+    description: string;
+    icon: string;
+    slug: string;
+  }) {
+    return this.request<{ systemIntegrator: any; message: string }>(
+      '/system-integrators',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      },
+    );
+  }
+
+  async updateSystemIntegrator(
+    id: string,
+    data: {
+      title: string;
+      description: string;
+      icon: string;
+      slug: string;
+    },
+  ) {
+    return this.request<{ systemIntegrator: any; message: string }>(
+      `/system-integrators/${id}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      },
+    );
+  }
+
+  async deleteSystemIntegrator(id: string) {
+    return this.request<{ message: string }>(`/system-integrators/${id}`, {
       method: 'DELETE',
     });
   }

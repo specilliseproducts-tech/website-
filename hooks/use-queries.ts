@@ -3,6 +3,9 @@ import { apiClient } from '@/lib/apiClient';
 import { PaginationParams } from '@/lib/apiClient';
 import { toast } from '@/hooks/use-toast';
 import { ProductInsert } from '@/app/dashboard/products/schema';
+import { SolutionInsert } from '@/app/dashboard/solutions/schema';
+import { PrincipalProductInsert } from '@/app/dashboard/principal-products/schema';
+import { z } from 'zod';
 
 // Account hooks
 export function useAccounts(
@@ -11,7 +14,13 @@ export function useAccounts(
   return useQuery({
     queryKey: ['accounts', params],
     queryFn: () => apiClient.getAccounts(params),
-    select: (data) => (data.success ? data.data : null),
+    select: (data) => {
+      console.log('useAccounts - Raw data:', data);
+      if (data.success && data.data) {
+        return data.data;
+      }
+      return null;
+    },
   });
 }
 
@@ -126,7 +135,17 @@ export function useProducts(params?: PaginationParams) {
   return useQuery({
     queryKey: ['products', params],
     queryFn: () => apiClient.getProducts(params),
-    select: (data) => (data.success ? data.data : null),
+    select: (data) => {
+      console.log('useProducts - Raw data:', data);
+      if (data.success && data.data) {
+        // Ensure we return { products, pagination } for dashboard table
+        return {
+          products: data.data.products,
+          pagination: data.data.pagination,
+        };
+      }
+      return null;
+    },
   });
 }
 
@@ -228,7 +247,13 @@ export function useContactForms(
   return useQuery({
     queryKey: ['contact-forms', params],
     queryFn: () => apiClient.getContactForms(params),
-    select: (data) => (data.success ? data.data : null),
+    select: (data) => {
+      console.log('useContactForms - Raw data:', data);
+      if (data.success && data.data) {
+        return data.data;
+      }
+      return null;
+    },
   });
 }
 
@@ -346,6 +371,227 @@ export function useDeleteContactForm() {
   });
 }
 
+// Solution hooks
+export function useSolutions(params?: PaginationParams) {
+  return useQuery({
+    queryKey: ['solutions', params],
+    queryFn: () => apiClient.getSolutions(params),
+    select: (data) => {
+      console.log('useSolutions - Raw data:', data);
+      if (data.success && data.data) {
+        // Ensure we return { solutions, pagination } for dashboard table
+        return {
+          solutions: data.data.solutions,
+          pagination: data.data.pagination,
+        };
+      }
+      return null;
+    },
+  });
+}
+
+export function useCreateSolution() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: SolutionInsert) => apiClient.createSolution(data),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['solutions'] });
+        toast({
+          title: 'Success',
+          description: 'Solution created successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to create solution',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to create solution',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+export function useUpdateSolution() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: SolutionInsert }) =>
+      apiClient.updateSolution(id, data),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['solutions'] });
+        toast({
+          title: 'Success',
+          description: 'Solution updated successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to update solution',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to update solution',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+export function useDeleteSolution() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => apiClient.deleteSolution(id),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['solutions'] });
+        toast({
+          title: 'Success',
+          description: 'Solution deleted successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to delete solution',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to delete solution',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+// Principal Product hooks
+export function usePrincipalProducts(params?: PaginationParams) {
+  return useQuery({
+    queryKey: ['principal-products', params],
+    queryFn: () => apiClient.getPrincipalProducts(params),
+    select: (data) => {
+      console.log('usePrincipalProducts - Raw data:', data);
+      if (data.success && data.data) {
+        // Ensure we return { principalProducts, pagination } for dashboard table
+        return {
+          principalProducts: data.data.principalProducts,
+          pagination: data.data.pagination,
+        };
+      }
+      return null;
+    },
+  });
+}
+
+export function useCreatePrincipalProduct() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: PrincipalProductInsert) =>
+      apiClient.createPrincipalProduct(data),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['principal-products'] });
+        toast({
+          title: 'Success',
+          description: 'Principal product created successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to create principal product',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to create principal product',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+export function useUpdatePrincipalProduct() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: PrincipalProductInsert }) =>
+      apiClient.updatePrincipalProduct(id, data),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['principal-products'] });
+        toast({
+          title: 'Success',
+          description: 'Principal product updated successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to update principal product',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to update principal product',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+export function useDeletePrincipalProduct() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => apiClient.deletePrincipalProduct(id),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['principal-products'] });
+        toast({
+          title: 'Success',
+          description: 'Principal product deleted successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to delete principal product',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to delete principal product',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
 // Gallery hooks
 export function useGalleryItems(
   params?: PaginationParams & { search?: string; category?: string },
@@ -353,7 +599,13 @@ export function useGalleryItems(
   return useQuery({
     queryKey: ['gallery-items', params],
     queryFn: () => apiClient.getGalleryItems(params),
-    select: (data) => (data.success ? data.data : null),
+    select: (data) => {
+      console.log('useGalleryItems - Raw data:', data);
+      if (data.success && data.data) {
+        return data.data;
+      }
+      return null;
+    },
   });
 }
 
@@ -607,6 +859,247 @@ export function useDeleteTeam() {
       toast({
         title: 'Error',
         description: error.message || 'Failed to delete team member',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+// SystemIntegrator hooks
+export function useSystemIntegrators(
+  params?: PaginationParams & { search?: string },
+) {
+  return useQuery({
+    queryKey: ['systemIntegrators', params],
+    queryFn: async () => {
+      console.log('useSystemIntegrators - Fetching with params:', params);
+      const result = await apiClient.getSystemIntegrators(params);
+      console.log('useSystemIntegrators - API result:', result);
+      return result;
+    },
+    select: (data) => {
+      console.log('useSystemIntegrators - Raw data:', data);
+      console.log('useSystemIntegrators - data.success:', data.success);
+      console.log('useSystemIntegrators - data.data:', data.data);
+
+      if (data.success && data.data) {
+        const selected = data.data;
+        console.log(
+          'useSystemIntegrators - Selected data (systemIntegrators):',
+          selected.systemIntegrators,
+        );
+        console.log(
+          'useSystemIntegrators - Selected data (pagination):',
+          selected.pagination,
+        );
+        return selected;
+      }
+
+      console.log(
+        'useSystemIntegrators - Returning null due to unsuccessful response',
+      );
+      return null;
+    },
+  });
+}
+
+export function useSystemIntegrator(id: string) {
+  return useQuery({
+    queryKey: ['systemIntegrators', id],
+    queryFn: () => apiClient.getSystemIntegrator(id),
+    select: (data) => (data.success ? data.data : null),
+  });
+}
+
+export function useCreateSystemIntegrator() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: {
+      title: string;
+      description: string;
+      icon: string;
+      slug: string;
+    }) => apiClient.createSystemIntegrator(data),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['systemIntegrators'] });
+        toast({
+          title: 'Success',
+          description: 'System integrator created successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to create system integrator',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to create system integrator',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+export function useUpdateSystemIntegrator() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: {
+      id: string;
+      title: string;
+      description: string;
+      icon: string;
+      slug: string;
+    }) => apiClient.updateSystemIntegrator(data.id, data),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['systemIntegrators'] });
+        toast({
+          title: 'Success',
+          description: 'System integrator updated successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to update system integrator',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to update system integrator',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+export function useDeleteSystemIntegrator() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => apiClient.deleteSystemIntegrator(id),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['systemIntegrators'] });
+        toast({
+          title: 'Success',
+          description: 'System integrator deleted successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to delete system integrator',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to delete system integrator',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+// Collaborator hooks
+const CollaboratorSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  longDescription: z.string(),
+  logo: z.string(),
+  website: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export function useCollaborators(
+  params?: PaginationParams & { search?: string },
+) {
+  return useQuery({
+    queryKey: ['collaborators', params],
+    queryFn: () => apiClient.getCollaborators(params),
+    select: (data) => (data.success && data.data ? data.data : null),
+  });
+}
+
+export function useCollaborator(id: string) {
+  return useQuery({
+    queryKey: ['collaborators', id],
+    queryFn: () => apiClient.getCollaborator(id),
+    select: (data) => (data.success ? data.data : null),
+    enabled: !!id,
+  });
+}
+
+export function useCreateCollaborator() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (
+      data: Omit<
+        z.infer<typeof CollaboratorSchema>,
+        'id' | 'createdAt' | 'updatedAt'
+      >,
+    ) => apiClient.createCollaborator(data),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['collaborators'] });
+        toast({
+          title: 'Success',
+          description: 'Collaborator created successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to create collaborator',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to create collaborator',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+export function useDeleteCollaborator() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => apiClient.deleteCollaborator(id),
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['collaborators'] });
+        toast({
+          title: 'Success',
+          description: 'Collaborator deleted successfully',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: response.error || 'Failed to delete collaborator',
+          variant: 'destructive',
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to delete collaborator',
         variant: 'destructive',
       });
     },

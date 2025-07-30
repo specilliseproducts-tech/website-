@@ -86,18 +86,26 @@ export async function GET(request: NextRequest) {
     ]);
 
     return NextResponse.json({
-      contactForms,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit),
+      success: true,
+      data: {
+        contactForms,
+        pagination: {
+          page,
+          perPage: limit,
+          totalCount: total,
+          totalPages: Math.ceil(total / limit),
+          hasNextPage: page < Math.ceil(total / limit),
+          hasPrevPage: page > 1,
+        },
       },
     });
   } catch (error) {
     console.error('Contact forms fetch error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        success: false,
+        error: 'Internal server error',
+      },
       { status: 500 },
     );
   }
