@@ -33,40 +33,52 @@ export type PaginatedResponse<T> = {
 };
 
 class ApiClient {
-  async getCollaborators(params?: PaginationParams & { search?: string }) {
+  async getCollaborators(
+    params?: PaginationParams & { search?: string },
+  ): Promise<
+    ApiResponse<{ collaborators: Collaborator[]; pagination: Pagination }>
+  > {
     const query = params
       ? '?' +
         new URLSearchParams(
           Object.entries(params)
-            .filter(([_, v]) => v !== undefined && v !== '')
+            .filter(([, v]) => v !== undefined && v !== '')
             .map(([k, v]) => [k, String(v)]),
         )
       : '';
-    return this.request<{ collaborators: any[]; pagination: any }>(
-      `/collaborators${query}`,
-    );
+    return this.request<{
+      collaborators: Collaborator[];
+      pagination: Pagination;
+    }>(`/collaborators${query}`);
   }
 
-  async getCollaborator(id: string) {
-    return this.request<any>(`/collaborators/${id}`);
+  async getCollaborator(id: string): Promise<ApiResponse<Collaborator>> {
+    return this.request<Collaborator>(`/collaborators/${id}`);
   }
 
-  async createCollaborator(data: any) {
-    return this.request<any>(`/collaborators`, {
+  async createCollaborator(
+    data: CollaboratorInsert,
+  ): Promise<ApiResponse<Collaborator>> {
+    return this.request<Collaborator>(`/collaborators`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
-  async updateCollaborator(id: string, data: any) {
-    return this.request<any>(`/collaborators/${id}`, {
+  async updateCollaborator(
+    id: string,
+    data: Partial<CollaboratorInsert>,
+  ): Promise<ApiResponse<Collaborator>> {
+    return this.request<Collaborator>(`/collaborators/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
-  async deleteCollaborator(id: string) {
-    return this.request<any>(`/collaborators/${id}`, {
+  async deleteCollaborator(
+    id: string,
+  ): Promise<ApiResponse<{ success: boolean }>> {
+    return this.request<{ success: boolean }>(`/collaborators/${id}`, {
       method: 'DELETE',
     });
   }
@@ -270,7 +282,11 @@ class ApiClient {
   }
 
   // Contact Form methods
-  async getContactForms(params?: PaginationParams & { search?: string }) {
+  async getContactForms(
+    params?: PaginationParams & { search?: string },
+  ): Promise<
+    ApiResponse<{ contactForms: ContactForm[]; pagination: Pagination }>
+  > {
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.append('page', params.page.toString());
     if (params?.perPage)
@@ -279,20 +295,15 @@ class ApiClient {
 
     const query = searchParams.toString();
     return this.request<{
-      contactForms: any[];
-      pagination: {
-        page: number;
-        perPage: number;
-        totalCount: number;
-        totalPages: number;
-        hasNextPage: boolean;
-        hasPrevPage: boolean;
-      };
+      contactForms: ContactForm[];
+      pagination: Pagination;
     }>(`/contact-forms${query ? `?${query}` : ''}`);
   }
 
-  async getContactForm(id: string) {
-    return this.request<{ contactForm: any }>(`/contact-forms/${id}`);
+  async getContactForm(
+    id: string,
+  ): Promise<ApiResponse<{ contactForm: ContactForm }>> {
+    return this.request<{ contactForm: ContactForm }>(`/contact-forms/${id}`);
   }
 
   async createContactForm(data: {
@@ -310,15 +321,9 @@ class ApiClient {
 
   async updateContactForm(
     id: string,
-    data: Partial<{
-      name: string;
-      email: string;
-      phone: string;
-      subject: string;
-      message: string;
-    }>,
-  ) {
-    return this.request<{ contactForm: any; message: string }>(
+    data: Partial<ContactFormInsert>,
+  ): Promise<ApiResponse<{ contactForm: ContactForm; message: string }>> {
+    return this.request<{ contactForm: ContactForm; message: string }>(
       `/contact-forms/${id}`,
       {
         method: 'PUT',
@@ -336,7 +341,9 @@ class ApiClient {
   // Gallery methods
   async getGalleryItems(
     params?: PaginationParams & { search?: string; category?: string },
-  ) {
+  ): Promise<
+    ApiResponse<{ galleryItems: GalleryItem[]; pagination: Pagination }>
+  > {
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.append('page', params.page.toString());
     if (params?.perPage)
@@ -346,44 +353,34 @@ class ApiClient {
 
     const query = searchParams.toString();
     return this.request<{
-      galleryItems: any[];
-      pagination: {
-        page: number;
-        perPage: number;
-        totalCount: number;
-        totalPages: number;
-        hasNextPage: boolean;
-        hasPrevPage: boolean;
-      };
+      galleryItems: GalleryItem[];
+      pagination: Pagination;
     }>(`/gallery${query ? `?${query}` : ''}`);
   }
 
-  async getGalleryItem(id: string) {
-    return this.request<{ galleryItem: any }>(`/gallery/${id}`);
+  async getGalleryItem(
+    id: string,
+  ): Promise<ApiResponse<{ galleryItem: GalleryItem }>> {
+    return this.request<{ galleryItem: GalleryItem }>(`/gallery/${id}`);
   }
 
-  async createGalleryItem(data: {
-    category: string;
-    title: string;
-    subtitle: string;
-    imagePath: string;
-  }) {
-    return this.request<{ galleryItem: any; message: string }>('/gallery', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+  async createGalleryItem(
+    data: GalleryItemInsert,
+  ): Promise<ApiResponse<{ galleryItem: GalleryItem; message: string }>> {
+    return this.request<{ galleryItem: GalleryItem; message: string }>(
+      '/gallery',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      },
+    );
   }
 
   async updateGalleryItem(
     id: string,
-    data: Partial<{
-      category: string;
-      title: string;
-      subtitle: string;
-      imagePath: string;
-    }>,
-  ) {
-    return this.request<{ galleryItem: any; message: string }>(
+    data: Partial<GalleryItemInsert>,
+  ): Promise<ApiResponse<{ galleryItem: GalleryItem; message: string }>> {
+    return this.request<{ galleryItem: GalleryItem; message: string }>(
       `/gallery/${id}`,
       {
         method: 'PUT',
@@ -401,7 +398,7 @@ class ApiClient {
   // Team methods
   async getTeams(
     params?: PaginationParams & { search?: string; position?: string },
-  ) {
+  ): Promise<ApiResponse<{ teams: Team[]; pagination: Pagination }>> {
     const query = params
       ? new URLSearchParams(
           Object.entries(params).filter(
@@ -410,29 +407,19 @@ class ApiClient {
         ).toString()
       : '';
 
-    return this.request<{
-      teams: any[];
-      pagination: {
-        page: number;
-        perPage: number;
-        totalCount: number;
-        totalPages: number;
-        hasNextPage: boolean;
-        hasPrevPage: boolean;
-      };
-    }>(`/teams${query ? `?${query}` : ''}`);
+    return this.request<{ teams: Team[]; pagination: Pagination }>(
+      `/teams${query ? `?${query}` : ''}`,
+    );
   }
 
-  async getTeam(id: string) {
-    return this.request<{ team: any }>(`/teams/${id}`);
+  async getTeam(id: string): Promise<ApiResponse<{ team: Team }>> {
+    return this.request<{ team: Team }>(`/teams/${id}`);
   }
 
-  async createTeam(data: {
-    name: string;
-    position: string;
-    imagePath: string;
-  }) {
-    return this.request<{ team: any; message: string }>('/teams', {
+  async createTeam(
+    data: TeamInsert,
+  ): Promise<ApiResponse<{ team: Team; message: string }>> {
+    return this.request<{ team: Team; message: string }>('/teams', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -440,13 +427,9 @@ class ApiClient {
 
   async updateTeam(
     id: string,
-    data: Partial<{
-      name: string;
-      position: string;
-      imagePath: string;
-    }>,
-  ) {
-    return this.request<{ team: any; message: string }>(`/teams/${id}`, {
+    data: Partial<TeamInsert>,
+  ): Promise<ApiResponse<{ team: Team; message: string }>> {
+    return this.request<{ team: Team; message: string }>(`/teams/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
@@ -459,7 +442,14 @@ class ApiClient {
   }
 
   // SystemIntegrator methods
-  async getSystemIntegrators(params?: PaginationParams & { search?: string }) {
+  async getSystemIntegrators(
+    params?: PaginationParams & { search?: string },
+  ): Promise<
+    ApiResponse<{
+      systemIntegrators: SystemIntegrator[];
+      pagination: Pagination;
+    }>
+  > {
     const query = params
       ? new URLSearchParams(
           Object.entries(params).filter(
@@ -469,53 +459,46 @@ class ApiClient {
       : '';
 
     return this.request<{
-      systemIntegrators: any[];
-      pagination: {
-        page: number;
-        perPage: number;
-        totalCount: number;
-        totalPages: number;
-        hasNextPage: boolean;
-        hasPrevPage: boolean;
-      };
+      systemIntegrators: SystemIntegrator[];
+      pagination: Pagination;
     }>(`/system-integrators${query ? `?${query}` : ''}`);
   }
 
-  async getSystemIntegrator(id: string) {
-    return this.request<{ systemIntegrator: any }>(`/system-integrators/${id}`);
+  async getSystemIntegrator(
+    id: string,
+  ): Promise<ApiResponse<{ systemIntegrator: SystemIntegrator }>> {
+    return this.request<{ systemIntegrator: SystemIntegrator }>(
+      `/system-integrators/${id}`,
+    );
   }
 
-  async createSystemIntegrator(data: {
-    title: string;
-    description: string;
-    icon: string;
-    slug: string;
-  }) {
-    return this.request<{ systemIntegrator: any; message: string }>(
-      '/system-integrators',
-      {
-        method: 'POST',
-        body: JSON.stringify(data),
-      },
-    );
+  async createSystemIntegrator(
+    data: SystemIntegratorInsert,
+  ): Promise<
+    ApiResponse<{ systemIntegrator: SystemIntegrator; message: string }>
+  > {
+    return this.request<{
+      systemIntegrator: SystemIntegrator;
+      message: string;
+    }>('/system-integrators', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   }
 
   async updateSystemIntegrator(
     id: string,
-    data: {
-      title: string;
-      description: string;
-      icon: string;
-      slug: string;
-    },
-  ) {
-    return this.request<{ systemIntegrator: any; message: string }>(
-      `/system-integrators/${id}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      },
-    );
+    data: SystemIntegratorInsert,
+  ): Promise<
+    ApiResponse<{ systemIntegrator: SystemIntegrator; message: string }>
+  > {
+    return this.request<{
+      systemIntegrator: SystemIntegrator;
+      message: string;
+    }>(`/system-integrators/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
   }
 
   async deleteSystemIntegrator(id: string) {

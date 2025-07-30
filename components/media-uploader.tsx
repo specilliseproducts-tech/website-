@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
@@ -63,14 +64,16 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                 const res = JSON.parse(xhr.responseText);
                 urls.push(res.secure_url);
                 resolve(res.secure_url);
-              } catch (parseError) {
+              } catch (e) {
+                const parseError = e as Error;
                 reject('Invalid response format');
               }
             } else {
               try {
                 const errorRes = JSON.parse(xhr.responseText);
                 reject(errorRes.error?.message || 'Upload failed');
-              } catch (parseError) {
+              } catch (e) {
+                const parseError = e as Error;
                 reject(`Upload failed with status ${xhr.status}`);
               }
             }
@@ -79,8 +82,9 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
         });
         xhr.send(formData);
         await promise;
-      } catch (err: any) {
-        console.error('Upload error:', err);
+      } catch (err) {
+        const e = err as Error;
+        console.error('Upload error:', e);
         setError('Upload failed. Please try again.');
         setUploading(false);
         return;
@@ -165,10 +169,12 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
         <div className="w-full mt-4 grid grid-cols-2 gap-2">
           {previews.map((url, idx) =>
             type === 'image' ? (
-              <img
+              <Image
                 key={idx}
                 src={url}
                 alt="preview"
+                width={128}
+                height={128}
                 className="w-full h-32 object-cover rounded shadow"
               />
             ) : type === 'video' ? (

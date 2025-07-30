@@ -40,7 +40,8 @@ export function DeleteGalleryItem({ data, children }: DeleteGalleryItemProps) {
           <AlertDialogTitle>Delete Gallery Item</AlertDialogTitle>
           <AlertDialogDescription>
             Are you sure you want to delete the gallery item{' '}
-            <span className="font-medium">"{data.title}"</span>? This action cannot be undone.
+            <span className="font-medium">&quot;{data.title}&quot;</span>? This
+            action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

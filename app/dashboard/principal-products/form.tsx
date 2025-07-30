@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -121,9 +122,11 @@ export function PrincipalProductForm(props: Props) {
                   />
                   {field.value && (
                     <div className="flex items-center space-x-2">
-                      <img
+                      <Image
                         src={field.value}
                         alt="Principal Product preview"
+                        width={80}
+                        height={80}
                         className="w-20 h-20 object-cover rounded"
                       />
                       <span className="text-sm text-muted-foreground">

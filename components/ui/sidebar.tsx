@@ -94,7 +94,7 @@ const SidebarProvider = React.forwardRef<
       return isMobileDevice
         ? setOpenMobile((open) => !open)
         : setOpen((open) => !open);
-    }, [useMobile, setOpen, setOpenMobile]);
+    }, [isMobileDevice, setOpen, setOpenMobile]);
 
     // Adds a keyboard shortcut to toggle the sidebar.
     React.useEffect(() => {
@@ -130,7 +130,7 @@ const SidebarProvider = React.forwardRef<
         state,
         open,
         setOpen,
-        useMobile,
+        isMobileDevice,
         openMobile,
         setOpenMobile,
         toggleSidebar,

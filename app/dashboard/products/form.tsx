@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -323,9 +324,11 @@ export function ProductForm(props: Props) {
                   />
                   {field.value && (
                     <div className="mt-2">
-                      <img
+                      <Image
                         src={field.value}
                         alt="Product preview"
+                        width={80}
+                        height={80}
                         className="h-20 w-20 object-cover rounded border"
                       />
                     </div>

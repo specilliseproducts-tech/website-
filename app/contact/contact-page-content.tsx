@@ -91,7 +91,7 @@ export default function ContactPageContent() {
                   Get In Touch
                 </h2>
                 <p className="text-muted-foreground mb-8">
-                  We're here to help with your customized solution needs.
+                  We&apos;re here to help with your customized solution needs.
                   Contact us today to discuss how we can help you.
                 </p>
 

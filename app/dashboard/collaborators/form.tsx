@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -96,9 +97,11 @@ export function CollaboratorForm({
         {formData.logo && (
           <div className="mt-2">
             <p className="text-sm text-muted-foreground mb-1">Current logo:</p>
-            <img
+            <Image
               src={formData.logo}
               alt="Logo preview"
+              width={64}
+              height={64}
               className="h-16 w-16 object-contain rounded border"
             />
           </div>

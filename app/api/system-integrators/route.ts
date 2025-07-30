@@ -11,6 +11,15 @@ const SystemIntegratorSchema = z.object({
   slug: z.string().min(1, 'Slug is required'),
 });
 
+type PrismaWhere = {
+  OR?: {
+    [key: string]: {
+      contains: string;
+      mode: 'insensitive';
+    };
+  }[];
+};
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -21,7 +30,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * perPage;
 
     // Build where clause
-    const where: any = {};
+    const where: PrismaWhere = {};
     if (search) {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },

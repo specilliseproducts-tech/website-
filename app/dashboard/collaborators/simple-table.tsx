@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -97,7 +98,7 @@ export function SimpleCollaboratorTable() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const search = searchParams.get('search') || '';
 
-  const fetchCollaborators = async () => {
+  const fetchCollaborators = useCallback(async () => {
     try {
       const searchQuery = search ? `?search=${encodeURIComponent(search)}` : '';
       const response = await fetch(`/api/collaborators${searchQuery}`);
@@ -108,7 +109,7 @@ export function SimpleCollaboratorTable() {
     } catch (error) {
       console.error('Failed to fetch collaborators:', error);
     }
-  };
+  }, [search]);
 
   useEffect(() => {
     const loadCollaborators = async () => {
@@ -118,7 +119,7 @@ export function SimpleCollaboratorTable() {
     };
 
     loadCollaborators();
-  }, [search]);
+  }, [search, fetchCollaborators]);
 
   const handleDelete = async (id: string) => {
     setDeletingId(id);
@@ -143,10 +144,11 @@ export function SimpleCollaboratorTable() {
           variant: 'destructive',
         });
       }
-    } catch (error: any) {
+    } catch (error) {
+      const e = error as Error;
       toast({
         title: 'Error',
-        description: error.message || 'Failed to delete collaborator',
+        description: e.message || 'Failed to delete collaborator',
         variant: 'destructive',
       });
     } finally {
@@ -180,10 +182,11 @@ export function SimpleCollaboratorTable() {
           {collaborators.length > 0 ? (
             <>
               Found {collaborators.length} collaborator
-              {collaborators.length !== 1 ? 's' : ''} matching "{search}"
+              {collaborators.length !== 1 ? 's' : ''} matching &quot;{search}
+              &quot;
             </>
           ) : (
-            <>No collaborators found matching "{search}"</>
+            <>No collaborators found matching &quot;{search}&quot;</>
           )}
         </div>
       )}
@@ -206,9 +209,11 @@ export function SimpleCollaboratorTable() {
                 </TableCell>
                 <TableCell>{collaborator.description}</TableCell>
                 <TableCell>
-                  <img
+                  <Image
                     src={collaborator.logo}
                     alt={collaborator.name}
+                    width={32}
+                    height={32}
                     className="h-8 w-8 object-contain rounded"
                   />
                 </TableCell>

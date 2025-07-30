@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 
@@ -8,6 +8,7 @@ import ProductCard from '@/components/product-card';
 import ScrollReveal from '@/components/scroll-reveal';
 import ProductFilter from '@/components/product-filter';
 import { useProducts } from '@/hooks/use-queries';
+import { Product } from '../dashboard/products/schema';
 
 export default function ProductsClientPage() {
   // Client component for filtering
@@ -85,7 +86,7 @@ function ProductsWithFilter() {
     ? allProducts.filter((product) => product.category === categoryFilter)
     : allProducts;
 
-  const handleFilterChange = (products: any[]) => {
+  const handleFilterChange = (products: Product[]) => {
     // This function is called by ProductFilter component
     // We'll implement the filtering logic based on the filter criteria
   };
@@ -126,7 +127,7 @@ function ProductsWithFilter() {
             No Products Found
           </h3>
           <p className="text-muted-foreground">
-            Try adjusting your filters to find what you're looking for.
+            Try adjusting your filters to find what you&apos;re looking for.
           </p>
         </div>
       )}

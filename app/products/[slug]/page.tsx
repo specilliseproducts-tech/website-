@@ -1,3 +1,4 @@
+import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -7,25 +8,20 @@ import { Button } from '@/components/ui/button';
 import ScrollReveal from '@/components/scroll-reveal';
 import ProductShowcaseSingleWrapper from '@/components/product-showcase/product-showcase-single-wrapper';
 
-// Helper to fetch a product by slug from the API
+// Helper to fetch a product by slug from the database
 async function fetchProductBySlug(slug: string) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/products/slug/${slug}`,
-    { cache: 'no-store' },
-  );
-  if (!res.ok) return null;
-  return res.json();
+  const product = await prisma.product.findUnique({
+    where: { slug },
+  });
+  return product;
 }
 
-// Helper to fetch all products (for static params)
+// Helper to fetch all products (for static params) from the database
 async function fetchAllProducts() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/products`,
-    { cache: 'no-store' },
-  );
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.items || [];
+  const products = await prisma.product.findMany({
+    select: { slug: true, name: true },
+  });
+  return products;
 }
 
 export async function generateMetadata({
@@ -47,7 +43,7 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const products = await fetchAllProducts();
-  return products.map((product: any) => ({
+  return products.map((product) => ({
     slug: product.slug,
   }));
 }
@@ -64,7 +60,7 @@ export default async function ProductPage({
 
   // Fetch all products for navigation
   const products = await fetchAllProducts();
-  const currentIndex = products.findIndex((p: any) => p.slug === params.slug);
+  const currentIndex = products.findIndex((p) => p.slug === params.slug);
   const prevProduct = currentIndex > 0 ? products[currentIndex - 1] : null;
   const nextProduct =
     currentIndex < products.length - 1 ? products[currentIndex + 1] : null;

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import {
   Table,
@@ -27,7 +28,6 @@ import {
 } from '@/components/ui/select';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Pencil, Trash2, Eye, Search, X } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { useGalleryItems } from '@/hooks/use-queries';
 import { format } from 'date-fns';
 import { UpdateGalleryItem } from './update';
@@ -44,9 +44,11 @@ export const columns: ColumnDef<GallerySelect>[] = [
       const galleryItem = row.original;
       return (
         <div className="w-16 h-16">
-          <img
+          <Image
             src={galleryItem.imagePath}
             alt={galleryItem.title}
+            width={64}
+            height={64}
             className="w-full h-full object-cover rounded"
           />
         </div>
@@ -72,7 +74,11 @@ export const columns: ColumnDef<GallerySelect>[] = [
     accessorKey: 'category',
     header: 'Category',
     cell: ({ row }) => {
-      return <Badge variant="outline">{row.getValue('category')}</Badge>;
+      return (
+        <div className="text-sm text-muted-foreground">
+          {row.getValue('category')}
+        </div>
+      );
     },
   },
   {

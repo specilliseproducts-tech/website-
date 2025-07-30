@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
@@ -32,9 +33,11 @@ export const columns: ColumnDef<SystemIntegratorSelect>[] = [
       const systemIntegrator = row.original;
       return (
         <div className="w-12 h-12">
-          <img
+          <Image
             src={systemIntegrator.icon}
             alt={systemIntegrator.title}
+            width={48}
+            height={48}
             className="w-full h-full object-cover rounded-lg"
           />
         </div>

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useCollaborators, useDeleteCollaborator } from '@/hooks/use-queries';
 import { Button } from '@/components/ui/button';
 import {
@@ -51,9 +52,11 @@ export function CollaboratorTable() {
               <TableCell className="font-medium">{collaborator.name}</TableCell>
               <TableCell>{collaborator.description}</TableCell>
               <TableCell>
-                <img
+                <Image
                   src={collaborator.logo}
                   alt={collaborator.name}
+                  width={32}
+                  height={32}
                   className="h-8 w-8 object-contain rounded"
                 />
               </TableCell>

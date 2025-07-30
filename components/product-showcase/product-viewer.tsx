@@ -60,7 +60,6 @@ function CanvasContent({
 }
 
 export default function ProductViewer({
-  modelPath,
   zoom,
   autoRotate,
   color,

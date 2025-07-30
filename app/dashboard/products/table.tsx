@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { z } from 'zod';
 import { productSelectSchema } from './schema';
 import { useState, useEffect } from 'react';
@@ -38,9 +39,11 @@ export const columns: ColumnDef<Product>[] = [
       const product = row.original;
       return (
         <div className="w-12 h-12">
-          <img
+          <Image
             src={product.imagePath}
             alt={product.name}
+            width={48}
+            height={48}
             className="w-full h-full object-cover rounded"
           />
         </div>
@@ -228,7 +231,8 @@ export function ProductTable({
                     key={header.id}
                     style={{ width: header.getSize() }}
                     className={
-                      (header.column.columnDef.meta as any)?.align === 'right'
+                      (header.column.columnDef.meta as { align?: string })
+                        ?.align === 'right'
                         ? 'text-right'
                         : ''
                     }
@@ -255,7 +259,8 @@ export function ProductTable({
                     <TableCell
                       key={cell.id}
                       className={
-                        (cell.column.columnDef.meta as any)?.align === 'right'
+                        (cell.column.columnDef.meta as { align?: string })
+                          ?.align === 'right'
                           ? 'text-right'
                           : ''
                       }
@@ -349,10 +354,11 @@ export function EnhancedProductTable() {
         <div className="text-sm text-muted-foreground">
           {total > 0 ? (
             <>
-              Found {total} product{total !== 1 ? 's' : ''} matching "{search}"
+              Found {total} product{total !== 1 ? 's' : ''} matching &quot;
+              {search}&quot;
             </>
           ) : (
-            <>No products found matching "{search}"</>
+            <>No products found matching &quot;{search}&quot;</>
           )}
         </div>
       )}

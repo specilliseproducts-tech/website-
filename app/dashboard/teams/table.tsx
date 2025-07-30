@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -35,9 +36,11 @@ export const columns: ColumnDef<TeamSelect>[] = [
       const team = row.original;
       return (
         <div className="w-12 h-12">
-          <img
+          <Image
             src={team.imagePath}
             alt={team.name}
+            width={48}
+            height={48}
             className="w-full h-full object-cover rounded-full"
           />
         </div>

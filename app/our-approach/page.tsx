@@ -1,71 +1,78 @@
-import Link from "next/link"
-import Image from "next/image"
-import { ChevronRight } from "lucide-react"
+import Link from 'next/link';
+import Image from 'next/image';
+import { ChevronRight } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import ScrollReveal from "@/components/scroll-reveal"
-import ProcessStep from "@/components/process-step"
+import { Button } from '@/components/ui/button';
+import ScrollReveal from '@/components/scroll-reveal';
+import ProcessStep from '@/components/process-step';
 
 export const metadata = {
-  title: "Our Approach | Spécialisé Products",
-  description: "Learn about our comprehensive approach to delivering customized solutions.",
-}
+  title: 'Our Approach | Spécialisé Products',
+  description:
+    'Learn about our comprehensive approach to delivering customized solutions.',
+};
 
 export default function OurApproachPage() {
   // Our approach steps
   const approachSteps = [
     {
-      number: "01",
-      title: "Initial Discussion",
-      description: "Initial discussion with prospects on what is needed? What do they imagine about his solution?",
+      number: '01',
+      title: 'Initial Discussion',
+      description:
+        'Initial discussion with prospects on what is needed? What do they imagine about his solution?',
     },
     {
-      number: "02",
-      title: "Broad Outline",
-      description: "Make broad outline on what is practical & possible?",
+      number: '02',
+      title: 'Broad Outline',
+      description: 'Make broad outline on what is practical & possible?',
     },
     {
-      number: "03",
-      title: "Fine Tuning Requirements",
-      description: "Many rounds of interaction to fine tune the requirements of the customer.",
+      number: '03',
+      title: 'Fine Tuning Requirements',
+      description:
+        'Many rounds of interaction to fine tune the requirements of the customer.',
     },
     {
-      number: "04",
-      title: "First Proposal",
-      description: "Once agreed, send proposal with detailed specifications and performance commitment.",
+      number: '04',
+      title: 'First Proposal',
+      description:
+        'Once agreed, send proposal with detailed specifications and performance commitment.',
     },
     {
-      number: "05",
-      title: "Preliminary Design Review",
+      number: '05',
+      title: 'Preliminary Design Review',
       description:
         'When purchase process is completed, we meet again with "Preliminary Design Review" (PDR) so that we are in sync with the customer\'s requirement.',
     },
     {
-      number: "06",
-      title: "Critical Design Review",
-      description: "After PDR, we go for Critical Design Review (CDR) and final design.",
+      number: '06',
+      title: 'Critical Design Review',
+      description:
+        'After PDR, we go for Critical Design Review (CDR) and final design.',
     },
     {
-      number: "07",
-      title: "Manufacturing",
-      description: "Once Final Design is completed, we go for manufacturing.",
+      number: '07',
+      title: 'Manufacturing',
+      description: 'Once Final Design is completed, we go for manufacturing.',
     },
     {
-      number: "08",
-      title: "Feedback Process",
-      description: "We call customer to see the manufactured system and request for the feedback.",
+      number: '08',
+      title: 'Feedback Process',
+      description:
+        'We call customer to see the manufactured system and request for the feedback.',
     },
     {
-      number: "09",
-      title: "Delivery",
-      description: "Once agreed, we make changes and proceed for delivery.",
+      number: '09',
+      title: 'Delivery',
+      description: 'Once agreed, we make changes and proceed for delivery.',
     },
     {
-      number: "10",
-      title: "Installation, Training and Support",
-      description: "We visit customer for installation & training. We assure for long term support.",
+      number: '10',
+      title: 'Installation, Training and Support',
+      description:
+        'We visit customer for installation & training. We assure for long term support.',
     },
-  ]
+  ];
 
   return (
     <>
@@ -73,10 +80,12 @@ export default function OurApproachPage() {
       <section className="relative w-full py-24 bg-gradient-to-br from-primary/20 to-secondary/20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">Our Approach</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
+              Our Approach
+            </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              We follow a comprehensive approach to ensure that we deliver solutions that perfectly match our customers'
-              requirements.
+              We follow a comprehensive approach to ensure that we deliver
+              solutions that perfectly match our customers&apos; requirements.
             </p>
           </div>
         </div>
@@ -88,21 +97,27 @@ export default function OurApproachPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <ScrollReveal direction="left">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">Our Customer-Centric Approach</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">
+                  Our Customer-Centric Approach
+                </h2>
                 <div className="text-muted-foreground space-y-4">
                   <p>
-                    At Spécialisé Products, we believe in a collaborative and iterative approach to developing
-                    customized solutions. We work closely with our customers throughout the entire process, from initial
-                    concept to final delivery and support.
+                    At Spécialisé Products, we believe in a collaborative and
+                    iterative approach to developing customized solutions. We
+                    work closely with our customers throughout the entire
+                    process, from initial concept to final delivery and support.
                   </p>
                   <p>
-                    Our approach is designed to ensure that we fully understand our customers' needs and deliver
-                    solutions that exceed their expectations. We focus on clear communication, thorough planning, and
-                    rigorous quality control at every stage.
+                    Our approach is designed to ensure that we fully understand
+                    our customers&apos; needs and deliver solutions that exceed
+                    their expectations. We focus on clear communication,
+                    thorough planning, and rigorous quality control at every
+                    stage.
                   </p>
                   <p>
-                    This systematic approach has helped us build long-lasting relationships with our customers and
-                    deliver innovative solutions that address their most challenging requirements.
+                    This systematic approach has helped us build long-lasting
+                    relationships with our customers and deliver innovative
+                    solutions that address their most challenging requirements.
                   </p>
                 </div>
               </div>
@@ -128,17 +143,24 @@ export default function OurApproachPage() {
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Our Process</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+                Our Process
+              </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                A step-by-step approach to delivering customized solutions that meet our customers' specific
-                requirements.
+                A step-by-step approach to delivering customized solutions that
+                meet our customers&apos; specific requirements.
               </p>
             </div>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {approachSteps.map((step) => (
-              <ProcessStep key={step.number} number={step.number} title={step.title} description={step.description} />
+              <ProcessStep
+                key={step.number}
+                number={step.number}
+                title={step.title}
+                description={step.description}
+              />
             ))}
           </div>
         </div>
@@ -149,9 +171,12 @@ export default function OurApproachPage() {
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Our Process Flow</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+                Our Process Flow
+              </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                A visual representation of our step-by-step approach to delivering customized solutions.
+                A visual representation of our step-by-step approach to
+                delivering customized solutions.
               </p>
             </div>
           </ScrollReveal>
@@ -168,7 +193,9 @@ export default function OurApproachPage() {
                       {step}
                     </div>
                     <div className="mt-4 text-center">
-                      <h3 className="font-bold text-primary">{approachSteps[step - 1].title}</h3>
+                      <h3 className="font-bold text-primary">
+                        {approachSteps[step - 1].title}
+                      </h3>
                     </div>
                   </div>
                 </ScrollReveal>
@@ -183,7 +210,9 @@ export default function OurApproachPage() {
                       {step}
                     </div>
                     <div className="mt-4 text-center">
-                      <h3 className="font-bold text-primary">{approachSteps[step - 1].title}</h3>
+                      <h3 className="font-bold text-primary">
+                        {approachSteps[step - 1].title}
+                      </h3>
                     </div>
                   </div>
                 </ScrollReveal>
@@ -198,9 +227,12 @@ export default function OurApproachPage() {
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Benefits of Our Approach</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+                Benefits of Our Approach
+              </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                How our systematic approach benefits our customers and ensures successful project outcomes.
+                How our systematic approach benefits our customers and ensures
+                successful project outcomes.
               </p>
             </div>
           </ScrollReveal>
@@ -208,30 +240,36 @@ export default function OurApproachPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <ScrollReveal delay={0.1}>
               <div className="bg-card p-8 rounded-xl shadow-md">
-                <h3 className="text-2xl font-bold text-primary mb-4">Clear Understanding</h3>
+                <h3 className="text-2xl font-bold text-primary mb-4">
+                  Clear Understanding
+                </h3>
                 <p className="text-muted-foreground">
-                  Our iterative approach ensures that we fully understand your requirements before proceeding with
-                  design and manufacturing.
+                  Our iterative approach ensures that we fully understand your
+                  requirements before proceeding with design and manufacturing.
                 </p>
               </div>
             </ScrollReveal>
 
             <ScrollReveal delay={0.2}>
               <div className="bg-card p-8 rounded-xl shadow-md">
-                <h3 className="text-2xl font-bold text-primary mb-4">Quality Assurance</h3>
+                <h3 className="text-2xl font-bold text-primary mb-4">
+                  Quality Assurance
+                </h3>
                 <p className="text-muted-foreground">
-                  Multiple review stages and feedback loops ensure that the final product meets the highest quality
-                  standards.
+                  Multiple review stages and feedback loops ensure that the
+                  final product meets the highest quality standards.
                 </p>
               </div>
             </ScrollReveal>
 
             <ScrollReveal delay={0.3}>
               <div className="bg-card p-8 rounded-xl shadow-md">
-                <h3 className="text-2xl font-bold text-primary mb-4">Long-term Support</h3>
+                <h3 className="text-2xl font-bold text-primary mb-4">
+                  Long-term Support
+                </h3>
                 <p className="text-muted-foreground">
-                  Our commitment doesn't end with delivery. We provide comprehensive installation, training, and ongoing
-                  support.
+                  Our commitment doesn&apos;t end with delivery. We provide
+                  comprehensive installation, training, and ongoing support.
                 </p>
               </div>
             </ScrollReveal>
@@ -242,9 +280,12 @@ export default function OurApproachPage() {
       {/* CTA Section */}
       <section className="w-full py-20 bg-gradient-to-br from-primary/20 to-secondary/20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">Ready to Start Your Project?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">
+            Ready to Start Your Project?
+          </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-            Let's begin the journey of creating a customized solution for your specific needs.
+            Let&apos;s begin the journey of creating a customized solution for
+            your specific needs.
           </p>
           <Button asChild size="lg" className="group">
             <Link href="/contact">
@@ -255,5 +296,5 @@ export default function OurApproachPage() {
         </div>
       </section>
     </>
-  )
+  );
 }

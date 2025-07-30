@@ -1,9 +1,22 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 
 const prisma = new PrismaClient();
+
+type PrismaWhere = {
+  OR?: {
+    [key: string]: {
+      contains: string;
+      mode: 'insensitive';
+    };
+  }[];
+  position?: {
+    contains: string;
+    mode: 'insensitive';
+  };
+};
 
 // GET /api/teams - Get all teams with pagination and search
 export async function GET(request: NextRequest) {
@@ -17,7 +30,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * perPage;
 
     // Build where clause for filtering
-    const where: any = {};
+    const where: PrismaWhere = {};
 
     if (search) {
       where.OR = [

@@ -109,8 +109,8 @@ export default function CollaboratorsPage() {
                 Become a Partner
               </h2>
               <p className="text-muted-foreground mb-8">
-                We're always looking for new technology partners to help us
-                provide the best solutions to our customers. If you're
+                We&apos;re always looking for new technology partners to help us
+                provide the best solutions to our customers. If you&apos;re
                 interested in collaborating with us, please get in touch.
               </p>
               <Button asChild size="lg" className="group">

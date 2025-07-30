@@ -44,15 +44,15 @@ export default function LifeAtSPPLPage() {
                     At Spécialisé Products, we foster a culture of innovation,
                     collaboration, and continuous learning. Our team members are
                     encouraged to think creatively, share ideas, and push the
-                    boundaries of what's possible in laser technology and
+                    boundaries of what&apos;s possible in laser technology and
                     customized solutions.
                   </p>
                   <p>
-                    We believe that our greatest asset is our people, and we're
-                    committed to creating an environment where everyone can
-                    thrive professionally and personally. Our diverse team
-                    brings together experts from various fields, creating a rich
-                    tapestry of knowledge and experience.
+                    We believe that our greatest asset is our people, and
+                    we&apos;re committed to creating an environment where
+                    everyone can thrive professionally and personally. Our
+                    diverse team brings together experts from various fields,
+                    creating a rich tapestry of knowledge and experience.
                   </p>
                 </div>
               </div>
@@ -137,7 +137,7 @@ export default function LifeAtSPPLPage() {
             Join Our Team
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-            We're always looking for talented individuals to join our team.
+            We&apos;re always looking for talented individuals to join our team.
             Check out our current openings or send us your resume.
           </p>
           <Button asChild size="lg" className="group">

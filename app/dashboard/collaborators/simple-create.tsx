@@ -51,10 +51,11 @@ export function SimpleCreateCollaborator({
           variant: 'destructive',
         });
       }
-    } catch (error: any) {
+    } catch (error) {
+      const e = error as Error;
       toast({
         title: 'Error',
-        description: error.message || 'Failed to create collaborator',
+        description: e.message || 'Failed to create collaborator',
         variant: 'destructive',
       });
     } finally {

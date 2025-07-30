@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
@@ -16,6 +17,15 @@ const productCreateSchema = z.object({
   brochureUrl: z.string().min(1, 'Brochure URL is required'),
 });
 
+type PrismaWhere = {
+  OR?: {
+    [key: string]: {
+      contains: string;
+      mode: 'insensitive';
+    };
+  }[];
+};
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -28,7 +38,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * perPage;
 
     // Build filter conditions
-    const where: any = {};
+    const where: PrismaWhere = {};
     if (search) {
       where.OR = [
         {
@@ -65,7 +75,7 @@ export async function GET(request: NextRequest) {
       : 'name';
     const validSortOrder = sortOrder === 'desc' ? 'desc' : 'asc';
 
-    const orderBy: any = {
+    const orderBy: { [key: string]: Prisma.SortOrder } = {
       [validSortField]: validSortOrder,
     };
 

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { z } from 'zod';
 import { solutionSelectSchema } from './schema';
 import { useState, useEffect } from 'react';
@@ -24,7 +25,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Pencil, Trash2, Eye, Search, X, ExternalLink } from 'lucide-react';
 import { UpdateSolution } from './update';
 import { DeleteSolution } from './delete';
-import { Badge } from '@/components/ui/badge';
 import { useSolutions } from '@/hooks/use-queries';
 
 type Solution = z.infer<typeof solutionSelectSchema>;
@@ -38,9 +38,11 @@ export const columns: ColumnDef<Solution>[] = [
       const solution = row.original;
       return (
         <div className="w-12 h-12">
-          <img
+          <Image
             src={solution.imagePath}
             alt={solution.title}
+            width={48}
+            height={48}
             className="w-full h-full object-cover rounded"
           />
         </div>

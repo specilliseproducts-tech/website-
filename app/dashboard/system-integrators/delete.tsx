@@ -46,8 +46,8 @@ export function DeleteSystemIntegrator({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete the system integrator "
-            {systemIntegrator.title}". This action cannot be undone.
+            This will permanently delete the system integrator &quot;
+            {systemIntegrator.title}&quot;. This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

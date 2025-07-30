@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { ContactFormTable } from './table';
 import { Suspense } from 'react';
 

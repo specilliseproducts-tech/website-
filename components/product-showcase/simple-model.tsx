@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-// import type * as THREE from "three"
+import type * as THREE from 'three';
 
 interface SimpleModelProps {
   color: string;
@@ -10,10 +10,10 @@ interface SimpleModelProps {
 }
 
 export default function SimpleModel({ color, scale = 1 }: SimpleModelProps) {
-  const groupRef = useRef<any>(null);
-  const boxRef = useRef<any>(null);
-  const sphereRef = useRef<any>(null);
-  const cylinderRef = useRef<any>(null);
+  const groupRef = useRef<THREE.Group>(null);
+  const boxRef = useRef<THREE.Mesh>(null);
+  const sphereRef = useRef<THREE.Mesh>(null);
+  const cylinderRef = useRef<THREE.Mesh>(null);
 
   // Create a simple model instead of loading a complex one
   useFrame(({ clock }) => {

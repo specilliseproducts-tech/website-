@@ -17,6 +17,16 @@ const gallerySchema = z.object({
   imagePath: z.string().url('Must be a valid URL'),
 });
 
+type PrismaWhere = {
+  OR?: {
+    [key: string]: {
+      contains: string;
+      mode: 'insensitive';
+    };
+  }[];
+  category?: string;
+};
+
 // Protected endpoint - get all gallery items
 export async function GET(request: NextRequest) {
   try {
@@ -35,7 +45,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Build search filter
-    const where: any = {};
+    const where: PrismaWhere = {};
 
     if (search) {
       where.OR = [

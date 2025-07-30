@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { z } from 'zod';
 import { principalProductSelectSchema } from './schema';
 import { useState, useEffect } from 'react';
@@ -24,7 +25,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Pencil, Trash2, Eye, Search, X, ExternalLink } from 'lucide-react';
 import { UpdatePrincipalProduct } from './update';
 import { DeletePrincipalProduct } from './delete';
-import { Badge } from '@/components/ui/badge';
 import { usePrincipalProducts } from '@/hooks/use-queries';
 
 type PrincipalProduct = z.infer<typeof principalProductSelectSchema>;
@@ -38,9 +38,11 @@ export const columns: ColumnDef<PrincipalProduct>[] = [
       const principalProduct = row.original;
       return (
         <div className="w-12 h-12">
-          <img
+          <Image
             src={principalProduct.imagePath}
             alt={principalProduct.title}
+            width={48}
+            height={48}
             className="w-full h-full object-cover rounded"
           />
         </div>
