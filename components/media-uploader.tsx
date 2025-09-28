@@ -31,7 +31,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const acceptTypes =
-    type === 'image' ? 'image/*' : type === 'video' ? 'video/*' : '*';
+    type === 'image' ? 'image/*' : type === 'video' ? 'video/*' : 'application/pdf';
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -48,10 +48,11 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
       if (folderName) formData.append('folder', folderName);
       try {
         const xhr = new XMLHttpRequest();
-        xhr.open(
-          'POST',
-          `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`,
-        );
+        const uploadUrl = type === 'file' 
+          ? `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/raw/upload`
+          : `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
+        
+        xhr.open('POST', uploadUrl);
         xhr.upload.onprogress = (event) => {
           if (event.lengthComputable) {
             setProgress(Math.round((event.loaded / event.total) * 100));
@@ -62,6 +63,8 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
             if (xhr.status === 200) {
               try {
                 const res = JSON.parse(xhr.responseText);
+                console.log('Upload response:', res);
+                console.log('Generated URL:', res.secure_url);
                 urls.push(res.secure_url);
                 resolve(res.secure_url);
               } catch (e) {
@@ -185,15 +188,30 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                 className="w-full h-32 object-cover rounded shadow"
               />
             ) : (
-              <a
+              <div
                 key={idx}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-blue-600 underline truncate"
+                className="flex items-center space-x-2 p-2 bg-gray-100 rounded"
               >
-                {url.split('/').pop()}
-              </a>
+                <svg
+                  className="w-6 h-6 text-red-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 underline truncate"
+                >
+                  {url.split('/').pop()}
+                </a>
+              </div>
             ),
           )}
         </div>

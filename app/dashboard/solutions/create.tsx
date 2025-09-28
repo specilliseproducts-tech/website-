@@ -23,6 +23,7 @@ export function CreateSolution({ children }: Props) {
   const createSolutionMutation = useCreateSolution();
 
   async function createSolution(data: z.infer<typeof solutionInsertSchema>) {
+    console.log('Creating solution with data:', data);
     createSolutionMutation.mutate(data);
   }
 

@@ -95,6 +95,37 @@ export const columns: ColumnDef<Solution>[] = [
     },
   },
   {
+    accessorKey: 'brochureUrl',
+    header: 'Brochure',
+    size: 100,
+    cell: ({ row }) => {
+      const brochureUrl = row.getValue('brochureUrl') as string;
+      return brochureUrl ? (
+        <a
+          href={brochureUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center space-x-1 text-red-600 hover:text-red-800"
+        >
+          <svg
+            className="h-4 w-4"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <span className="text-xs">PDF</span>
+        </a>
+      ) : (
+        <span className="text-gray-400 text-xs">No brochure</span>
+      );
+    },
+  },
+  {
     header: 'Actions',
     size: 120,
     meta: {

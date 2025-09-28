@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
+import { generateUniqueSlug } from '@/lib/utils/slug';
 
 const solutionCreateSchema = z.object({
   slug: z.string().min(1, 'Slug is required'),
@@ -11,6 +12,7 @@ const solutionCreateSchema = z.object({
   imagePath: z.string().min(1, 'Main image is required'),
   images: z.array(z.string()).max(4, 'Maximum 4 images allowed').default([]),
   link: z.string().min(1, 'Link is required'),
+  brochureUrl: z.string().optional(),
 });
 
 type PrismaWhere = {
@@ -120,25 +122,49 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    console.log('Solution creation request body:', body);
+    
     const validatedData = solutionCreateSchema.parse(body);
+    console.log('Validated data:', validatedData);
+
+    // Generate unique slug
+    const uniqueSlug = await generateUniqueSlug(
+      validatedData.title,
+      async (slug) => {
+        const existing = await prisma.solution.findUnique({
+          where: { slug },
+          select: { id: true }
+        });
+        return !existing; // Return true if slug is available (no existing solution)
+      }
+    );
+
+    console.log('Generated unique slug:', uniqueSlug);
 
     const solution = await prisma.solution.create({
-      data: validatedData,
+      data: {
+        ...validatedData,
+        slug: uniqueSlug,
+      },
     });
+
+    console.log('Created solution:', solution);
 
     return NextResponse.json(
       { success: true, data: solution },
       { status: 201 },
     );
   } catch (error) {
+    console.error('Error creating solution:', error);
+    
     if (error instanceof z.ZodError) {
+      console.error('Validation errors:', error.errors);
       return NextResponse.json(
         { error: 'Validation failed', details: error.errors },
         { status: 400 },
       );
     }
 
-    console.error('Error creating solution:', error);
     return NextResponse.json(
       { error: 'Failed to create solution' },
       { status: 500 },

@@ -112,6 +112,7 @@ model Solution {
   imagePath   String   // Main image (for backward compatibility)
   images      String[] // Array of up to 4 images
   link        String
+  brochureUrl String?  // Optional brochure PDF URL
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

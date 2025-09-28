@@ -2,7 +2,8 @@ import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight, ChevronLeft, Check, ExternalLink } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Check, ExternalLink, Download } from 'lucide-react';
+import { getPdfDownloadUrl } from '@/lib/utils/pdf-test';
 
 import { Button } from '@/components/ui/button';
 import ScrollReveal from '@/components/scroll-reveal';
@@ -78,12 +79,22 @@ export default async function SolutionPage({
                 {solution.subtitle}
               </p>
             )}
-            <Button asChild variant="default" size="lg" className="group">
-              <Link href={solution.link} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="mr-2 h-5 w-5" />
-                Visit Solution
-              </Link>
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild variant="default" size="lg" className="group">
+                <Link href={solution.link} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="mr-2 h-5 w-5" />
+                  Visit Solution
+                </Link>
+              </Button>
+              {solution.brochureUrl && (
+                <Button asChild variant="outline" size="lg" className="group">
+                  <Link href={getPdfDownloadUrl(solution.brochureUrl)} target="_blank" rel="noopener noreferrer">
+                    <Download className="mr-2 h-5 w-5" />
+                    Download Brochure
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -159,13 +170,23 @@ export default async function SolutionPage({
                 </div>
                 <div className="md:col-span-2">
                   <h3 className="text-xl font-bold text-primary mb-4">External Link</h3>
-                  <Button asChild variant="outline" className="group">
-                    <Link href={solution.link} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      Visit Solution Page
-                      <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-2" />
-                    </Link>
-                  </Button>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button asChild variant="outline" className="group">
+                      <Link href={solution.link} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Visit Solution Page
+                        <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-2" />
+                      </Link>
+                    </Button>
+                    {solution.brochureUrl && (
+                      <Button asChild variant="outline" className="group">
+                        <Link href={getPdfDownloadUrl(solution.brochureUrl)} target="_blank" rel="noopener noreferrer">
+                          <Download className="mr-2 h-4 w-4" />
+                          Download Brochure
+                        </Link>
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -299,6 +320,14 @@ export default async function SolutionPage({
                 Visit Solution
               </Link>
             </Button>
+            {solution.brochureUrl && (
+              <Button asChild variant="outline" size="lg" className="group">
+                <Link href={getPdfDownloadUrl(solution.brochureUrl)} target="_blank" rel="noopener noreferrer">
+                  <Download className="mr-2 h-5 w-5" />
+                  Download Brochure
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </section>

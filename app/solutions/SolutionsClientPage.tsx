@@ -153,6 +153,7 @@ function SolutionsWithFilter() {
               description={solution.description}
               image={solution.imagePath}
               link={solution.link}
+              brochureUrl={solution.brochureUrl}
             />
           ))}
         </div>

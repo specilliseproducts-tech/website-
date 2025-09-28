@@ -13,6 +13,34 @@ export function generateSlug(text: string): string {
 }
 
 /**
+ * Generates a unique slug by checking for duplicates and adding a suffix if needed
+ * @param text - The text to convert to a slug
+ * @param checkUnique - Function to check if slug exists in database
+ * @returns Promise that resolves to a unique slug
+ */
+export async function generateUniqueSlug(
+  text: string,
+  checkUnique: (slug: string) => Promise<boolean>
+): Promise<string> {
+  let baseSlug = generateSlug(text);
+  let slug = baseSlug;
+  let counter = 1;
+
+  while (!(await checkUnique(slug))) {
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+    
+    // Prevent infinite loops
+    if (counter > 1000) {
+      slug = `${baseSlug}-${Date.now()}`;
+      break;
+    }
+  }
+
+  return slug;
+}
+
+/**
  * Debounced slug generation function
  * @param text - The text to convert to a slug
  * @param delay - Delay in milliseconds (default: 300)

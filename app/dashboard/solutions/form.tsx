@@ -37,6 +37,7 @@ export function SolutionForm(props: Props) {
       imagePath: '',
       images: [],
       link: '',
+      brochureUrl: undefined,
       ...props.data,
     },
   });
@@ -51,9 +52,18 @@ export function SolutionForm(props: Props) {
     }
   }, [titleValue, form, props.data?.slug]);
 
+  const handleSubmit = (values: z.infer<typeof solutionInsertSchema>) => {
+    // Filter out empty brochureUrl
+    const filteredValues = {
+      ...values,
+      brochureUrl: values.brochureUrl && values.brochureUrl.trim() !== '' ? values.brochureUrl : undefined,
+    };
+    props.onSubmit(filteredValues);
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="slug"
@@ -69,6 +79,9 @@ export function SolutionForm(props: Props) {
                 />
               </FormControl>
               <FormMessage />
+              <p className="text-xs text-muted-foreground">
+                The slug will be automatically made unique if duplicates exist.
+              </p>
             </FormItem>
           )}
         />
@@ -219,6 +232,58 @@ export function SolutionForm(props: Props) {
               <FormLabel>Link</FormLabel>
               <FormControl>
                 <Input placeholder="https://example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="brochureUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Brochure PDF (Optional)</FormLabel>
+              <FormControl>
+                <div className="space-y-4">
+                  <MediaUploader
+                    onUpload={(urls) => {
+                      if (urls.length > 0) {
+                        field.onChange(urls[0]);
+                      }
+                    }}
+                    multiple={false}
+                    folderName="brochures"
+                    type="file"
+                  />
+                  {field.value && (
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 p-2 bg-gray-100 rounded">
+                        <svg
+                          className="w-6 h-6 text-red-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="text-sm text-muted-foreground">
+                          PDF Brochure
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => field.onChange('')}
+                          className="text-red-500 hover:text-red-700 text-xs"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Download } from 'lucide-react';
+import { getPdfDownloadUrl } from '@/lib/utils/pdf-test';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +16,7 @@ interface SolutionCardProps {
   description: string;
   image: string;
   link: string;
+  brochureUrl?: string;
   color?: string;
 }
 
@@ -26,6 +28,7 @@ export default function SolutionCard({
   description,
   image,
   link,
+  brochureUrl,
   color = '#4834D4',
 }: SolutionCardProps) {
   return (
@@ -63,6 +66,15 @@ export default function SolutionCard({
               <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
             </Link>
           </Button>
+          
+          {brochureUrl && (
+            <Button asChild variant="outline" className="w-full group/btn">
+              <Link href={getPdfDownloadUrl(brochureUrl)} target="_blank" rel="noopener noreferrer">
+                <Download className="mr-2 h-4 w-4" />
+                Download Brochure
+              </Link>
+            </Button>
+          )}
           
           <div className="text-center">
             <span className="text-xs text-muted-foreground">

@@ -10,6 +10,7 @@ const solutionUpdateSchema = z.object({
   imagePath: z.string().min(1, 'Main image is required'),
   images: z.array(z.string()).max(4, 'Maximum 4 images allowed').default([]),
   link: z.string().min(1, 'Link is required'),
+  brochureUrl: z.string().optional(),
 });
 
 export async function GET(
