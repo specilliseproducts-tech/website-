@@ -108,63 +108,74 @@ export default function ProductPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      {/* Master Product Info */}
+      {/* Hero Section */}
       {currentProduct && (
-        <div className="bg-gradient-to-br from-primary/20 to-secondary/20 border-b border-gray-700 py-16">
+        <section className="relative w-full py-24 bg-gradient-to-br from-primary/20 to-secondary/20">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-              {/* Left: Images (Reduced size) */}
-              <div className="flex flex-col gap-4">
-                {currentProduct.images && currentProduct.images.length > 0 ? (
-                  <>
-                    {currentProduct.images.map((image: string, idx: number) => (
-                      <div key={idx} className="relative w-full aspect-square rounded-lg overflow-hidden border border-gray-700">
+            <div className="max-w-6xl mx-auto">
+              <ScrollReveal>
+                <div className="flex items-center gap-4 mb-6 justify-start">
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link href={`/principal-products/${params.slug}`}>
+                      <ArrowLeft className="mr-2 h-4 w-4" />
+                      Back to Principal Product
+                    </Link>
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-12">
+                  {/* Image Section - Left */}
+                  <div className="flex justify-center">
+                    {currentProduct.images && currentProduct.images.length > 0 ? (
+                      <div className="relative h-96 w-96 rounded-xl overflow-hidden shadow-lg bg-gray-100 flex items-center justify-center">
                         <Image
-                          src={image}
-                          alt={`Master product image ${idx + 1}`}
+                          src={currentProduct.images[0]}
+                          alt={currentProduct.title || 'Master product'}
                           fill
-                          className="object-cover"
+                          className="object-contain p-4"
                         />
                       </div>
-                    ))}
-                  </>
-                ) : (
-                  <div className="relative w-full aspect-square rounded-lg overflow-hidden border border-gray-700 bg-gray-800 flex items-center justify-center">
-                    <span className="text-gray-500 text-sm">No images available</span>
+                    ) : (
+                      <div className="relative h-96 w-96 rounded-xl overflow-hidden shadow-lg bg-gray-800 flex items-center justify-center">
+                        <span className="text-gray-500">No images available</span>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-
-              {/* Right: Title and Details (2 columns width) */}
-              <div className="md:col-span-2 space-y-8">
-                {/* Title */}
-                <div>
-                  <h1 className="text-5xl font-bold text-orange-500 mb-4">
-                    {currentProduct.title || 'Untitled Master Product'}
-                  </h1>
-                  {currentProduct.subtitle && (
-                    <p className="text-gray-400 text-xl mb-6">{currentProduct.subtitle}</p>
-                  )}
+                  
+                  {/* Content Section - Right */}
+                  <div className="space-y-6">
+                    {/* Title Section */}
+                    <div>
+                      <h1 className="text-4xl md:text-5xl font-bold text-orange-500 mb-6">
+                        {currentProduct.title || 'Untitled Master Product'}
+                      </h1>
+                      {currentProduct.subtitle && (
+                        <p className="text-lg text-gray-400 mb-6">
+                          {currentProduct.subtitle}
+                        </p>
+                      )}
+                    </div>
+                    
+                    {/* Key Features Section */}
+                    {currentProduct.keyFeatures && currentProduct.keyFeatures.length > 0 && (
+                      <div>
+                        <h3 className="text-xl font-semibold text-orange-500 mb-4">Key Features</h3>
+                        <ul className="space-y-3">
+                          {currentProduct.keyFeatures.map((feature: string, idx: number) => (
+                            <li key={idx} className="flex items-start gap-3 text-gray-300">
+                              <span className="text-orange-500 font-bold mt-1">✓</span>
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 </div>
-
-                {/* Key Features */}
-                {currentProduct.keyFeatures && currentProduct.keyFeatures.length > 0 && (
-                  <div>
-                    <h3 className="text-xl font-semibold text-orange-500 mb-4">Key Features</h3>
-                    <ul className="space-y-3">
-                      {currentProduct.keyFeatures.map((feature: string, idx: number) => (
-                        <li key={idx} className="flex items-start gap-3 text-gray-300">
-                          <span className="text-orange-500 font-bold mt-1">✓</span>
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
+              </ScrollReveal>
             </div>
           </div>
-        </div>
+        </section>
       )}
 
       {/* User Products Cards Section */}
